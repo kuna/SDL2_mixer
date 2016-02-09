@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0F21B847-7295-4BD3-A966-C66C9D34353E}</ProjectGuid>
+    <RootNamespace>SDL2_mixer_rev</RootNamespace>
+    <ProjectName>SDL2_mixer</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\SDL\include;..\timidity;..\native_midi;external\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WAV_MUSIC;MODPLUG_MUSIC;MODPLUG_DYNAMIC="libmodplug-1.dll";OGG_MUSIC;OGG_DYNAMIC="libvorbisfile-3.dll";FLAC_MUSIC;FLAC_DYNAMIC="libFLAC-8.dll";MP3_MUSIC;MP3_DYNAMIC="smpeg2.dll";MID_MUSIC;USE_TIMIDITY_MIDI;USE_NATIVE_MIDI;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\SDL\include;..\timidity;..\native_midi;external\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;WAV_MUSIC;MODPLUG_MUSIC;MODPLUG_DYNAMIC="libmodplug-1.dll";OGG_MUSIC;OGG_DYNAMIC="libvorbisfile-3.dll";FLAC_MUSIC;FLAC_DYNAMIC="libFLAC-8.dll";MP3_MUSIC;MP3_DYNAMIC="smpeg2.dll";MID_MUSIC;USE_TIMIDITY_MIDI;USE_NATIVE_MIDI;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Library Include="..\..\SDL\lib\x86\SDL2.lib" />
+    <Library Include="..\..\SDL\lib\x86\SDL2main.lib" />
+    <Library Include="native_midi\Release\native_midi.lib" />
+    <Library Include="timidity\Release\timidity.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\version.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\convertfreq.c" />
+    <ClCompile Include="..\dynamic_flac.c" />
+    <ClCompile Include="..\dynamic_fluidsynth.c" />
+    <ClCompile Include="..\dynamic_mod.c" />
+    <ClCompile Include="..\dynamic_modplug.c" />
+    <ClCompile Include="..\dynamic_mp3.c" />
+    <ClCompile Include="..\dynamic_ogg.c" />
+    <ClCompile Include="..\effects_internal.c" />
+    <ClCompile Include="..\effect_position.c" />
+    <ClCompile Include="..\effect_stereoreverse.c" />
+    <ClCompile Include="..\fluidsynth.c" />
+    <ClCompile Include="..\load_aiff.c" />
+    <ClCompile Include="..\load_flac.c" />
+    <ClCompile Include="..\load_ogg.c" />
+    <ClCompile Include="..\load_voc.c" />
+    <ClCompile Include="..\load_wav.c" />
+    <ClCompile Include="..\mixer.c" />
+    <ClCompile Include="..\music.c" />
+    <ClCompile Include="..\music_cmd.c" />
+    <ClCompile Include="..\music_flac.c" />
+    <ClCompile Include="..\music_mad.c" />
+    <ClCompile Include="..\music_mod.c" />
+    <ClCompile Include="..\music_modplug.c" />
+    <ClCompile Include="..\music_ogg.c" />
+    <ClCompile Include="..\wavestream.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\convertfreq.h" />
+    <ClInclude Include="..\dynamic_flac.h" />
+    <ClInclude Include="..\dynamic_fluidsynth.h" />
+    <ClInclude Include="..\dynamic_mod.h" />
+    <ClInclude Include="..\dynamic_modplug.h" />
+    <ClInclude Include="..\dynamic_mp3.h" />
+    <ClInclude Include="..\dynamic_ogg.h" />
+    <ClInclude Include="..\effects_internal.h" />
+    <ClInclude Include="..\fluidsynth.h" />
+    <ClInclude Include="..\load_aiff.h" />
+    <ClInclude Include="..\load_flac.h" />
+    <ClInclude Include="..\load_ogg.h" />
+    <ClInclude Include="..\load_voc.h" />
+    <ClInclude Include="..\load_wav.h" />
+    <ClInclude Include="..\music_cmd.h" />
+    <ClInclude Include="..\music_flac.h" />
+    <ClInclude Include="..\music_mad.h" />
+    <ClInclude Include="..\music_mod.h" />
+    <ClInclude Include="..\music_modplug.h" />
+    <ClInclude Include="..\music_ogg.h" />
+    <ClInclude Include="..\SDL_mixer.h" />
+    <ClInclude Include="..\wavestream.h" />
+    <ClInclude Include="external\include\FLAC\all.h" />
+    <ClInclude Include="external\include\FLAC\assert.h" />
+    <ClInclude Include="external\include\FLAC\callback.h" />
+    <ClInclude Include="external\include\FLAC\export.h" />
+    <ClInclude Include="external\include\FLAC\format.h" />
+    <ClInclude Include="external\include\FLAC\metadata.h" />
+    <ClInclude Include="external\include\FLAC\ordinals.h" />
+    <ClInclude Include="external\include\FLAC\stream_decoder.h" />
+    <ClInclude Include="external\include\FLAC\stream_encoder.h" />
+    <ClInclude Include="external\include\modplug.h" />
+    <ClInclude Include="external\include\MPEGframe.h" />
+    <ClInclude Include="external\include\ogg\config_types.h" />
+    <ClInclude Include="external\include\ogg\ogg.h" />
+    <ClInclude Include="external\include\ogg\os_types.h" />
+    <ClInclude Include="external\include\smpeg.h" />
+    <ClInclude Include="external\include\vorbis\codec.h" />
+    <ClInclude Include="external\include\vorbis\vorbisfile.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
