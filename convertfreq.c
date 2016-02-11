@@ -8,24 +8,38 @@
 
 #include "SDL_mixer.h"
 
-Uint32 read_bit(int byte, Uint8** buf) {
-	Uint32 r = 0;
-	for (; byte; byte--) {
-		r *= 256;
-		r += *((*buf)++);
+int read_bit(int byte, int sign, Uint8** buf) {
+	int r = 0;
+	if (byte == 1) {
+		r = *(*buf);
+		if (sign) r = (char)r;
 	}
+	else if (byte == 2) {
+		r = *(*(Uint16**)buf);
+		if (sign) r = (short)r;
+	}
+	else if (byte == 4) {
+		r = *(*(Uint32**)buf);
+	}
+	(*buf) += byte;
 	return r;
 }
 
-void write_bit(int byte, Uint8** buf, Uint32 val) {
-	for (; byte; byte--) {
-		*((*buf)++) = val;
-		val /= 256;
+void write_bit(int byte, int sign, Uint8** buf, Uint32 val) {
+	if (byte == 1) {
+		*(*(Uint8**)buf) = val;
 	}
+	else if (byte == 2) {
+		*(*(Uint16**)buf) = val;
+	}
+	else if (byte == 4) {
+		*(*(Uint32**)buf) = val;
+	}
+	(*buf) += byte;
 }
 
-#define READBIT read_bit(byte_, &buf_);
-#define WRITEBIT(v) write_bit(byte_, &newbuf_, v);
+#define READBIT read_bit(byte_, sign_, &buf_);
+#define WRITEBIT(v) write_bit(byte_, sign_, &newbuf_, v);
 void AudioFreqConvert(Mix_Chunk *chunk, int channels_, int format_, int freq_org, int freq_target) {
 	int bit_ = 16;
 	switch (format_) {
@@ -42,6 +56,13 @@ void AudioFreqConvert(Mix_Chunk *chunk, int channels_, int format_, int freq_org
 		bit_ = 8;
 		break;
 	}
+	int sign_ = 1;
+	switch (format_) {
+	case AUDIO_U16:
+	case AUDIO_U8:
+		sign_ = 0;
+		break;
+	}
 	int byte_ = bit_ / 8;
 
 	double mul_freq = (double)freq_target / freq_org;
@@ -50,7 +71,7 @@ void AudioFreqConvert(Mix_Chunk *chunk, int channels_, int format_, int freq_org
 	Uint8* newbuf_ = (Uint8*)SDL_malloc(newlen_);
 	Uint8* newbuf_org = newbuf_;
 	Uint8* buf_ = (Uint8*)chunk->abuf;
-	Uint32 lprev_ = 0, lcur_ = 0, rprev_ = 0, rcur_ = 0;
+	int lprev_ = 0, lcur_ = 0, rprev_ = 0, rcur_ = 0;
 	int audio_pos = 0;
 
 	lprev_ = READBIT;

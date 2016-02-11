@@ -1,3 +1,10 @@
+2.?
+additional modification by @lazykuna
+ * 24bit wav input file support
+ * 4bit wav input file support (not tested)
+ * 8000/16000/24000/32000/48000Hz Audio frequency supported (8/16bit 32000Hz tested)
+
+
 2.0.0:
 Sam Lantinga - Sun Jun  9 14:45:30 PDT 2013
  * Made libmodplug the default MOD player as it is now in the public domain

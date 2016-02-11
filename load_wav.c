@@ -80,6 +80,14 @@ Uint16 read_bit_wav(SDL_RWops *fp, int bit) {
 	}
 }
 
+Uint16 read_4bit_first(Uint8 byte) {
+	return (int)(byte / 16) * 16 * 256;
+}
+
+Uint16 read_4bit_last(Uint8 byte) {
+	return (byte % 16) * 16 * 256;
+}
+
 
 
 
@@ -149,7 +157,11 @@ SDL_AudioSpec *Mix_LoadWAV_RW_(SDL_RWops *src, int freesrc,
 
 	// bit rate
 	int bit_rate = sdl_read_short(src);
-	if (bit_rate != 8 && bit_rate != 16 && bit_rate != 24 && bit_rate != 32)
+	if (bit_rate != 4 && 
+		bit_rate != 8 && 
+		bit_rate != 16 && 
+		bit_rate != 24 && 
+		bit_rate != 32)
 	{ ERROR }
 
 	// check once again (valid block size?)
@@ -166,7 +178,7 @@ SDL_AudioSpec *Mix_LoadWAV_RW_(SDL_RWops *src, int freesrc,
 	// then use default SDL loader
 	// otherwise (24 bit), load it by using this module.
 	//
-	if (bit_rate != 24) {
+	if (bit_rate == 8 || bit_rate == 16 || bit_rate == 32) {
 		SDL_RWseek(src, 0, RW_SEEK_SET);
 		return SDL_LoadWAV_RW(src, freesrc, spec, audio_buf, audio_len);
 	}
@@ -235,14 +247,29 @@ SDL_AudioSpec *Mix_LoadWAV_RW_(SDL_RWops *src, int freesrc,
 	int pos = 0;
 	int mul = 2 * spec->channels;
 
+	//
+	// before continue, if wav file is 4 bit per sample,
+	// then extend it into 16 bit per sample.
+	//
 #define READBIT read_bit_wav(src, bit_rate)
-	for (int i = 0; i < samples; i++) {
-		int bufpos = i * mul;
-		*((Uint16*)(*audio_buf + bufpos)) = READBIT;
-		if (spec->channels == 2) 
-			*((Uint16*)(*audio_buf + bufpos + 2)) = READBIT;
+	if (bit_rate == 4) {
+		// it's 2 sample per a byte, actually.
+		bit_rate = 8;
+		Uint16* write_buf = *audio_buf;
+		for (int i = 0; i < samples / 2 * spec->channels; i++) {
+			Uint16 _t = READBIT;
+			*(write_buf++) = read_4bit_first(_t);
+			*(write_buf++) = read_4bit_last(_t);
+		}
 	}
-
+	else {
+		for (int i = 0; i < samples; i++) {
+			int bufpos = i * mul;
+			*((Uint16*)(*audio_buf + bufpos)) = READBIT;
+			if (spec->channels == 2)
+				*((Uint16*)(*audio_buf + bufpos + 2)) = READBIT;
+		}
+	}
 
 	/*
 	 * cleanup
